@@ -22,6 +22,10 @@ namespace ConsoleClient
 
 
 
+        /// <summary>
+        /// Sets the initial word on the band
+        /// </summary>
+        /// <param name="word"></param>
         public void SetInitialWord(string word)
         {
             Reset();
@@ -34,11 +38,20 @@ namespace ConsoleClient
             }
         }
 
+        /// <summary>
+        /// Reads the current char from the band
+        /// </summary>
+        /// <returns></returns>
         public char Read()
         {
             return turingBand[index];
         }
 
+        /// <summary>
+        /// Writes a char to the band and applies a direction
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="direction"></param>
         public void Write(char c, char direction)
         {
             turingBand[index] = c;
@@ -52,6 +65,11 @@ namespace ConsoleClient
             }
         }
 
+        /// <summary>
+        /// Returns the current band as string
+        /// </summary>
+        /// <param name="lineLength">How long the string should be</param>
+        /// <returns></returns>
         public string GetGraphical(int lineLength)
         {
             StringBuilder b = new StringBuilder();
@@ -64,10 +82,14 @@ namespace ConsoleClient
             return b.ToString();
         }
 
+        /// <summary>
+        /// Read the word which is currently on the band
+        /// </summary>
+        /// <returns></returns>
         public string GetWord()
         {
             StringBuilder b = new StringBuilder();
-            int searchRange = 1000;
+            int searchRange = 1000; // The range (forward and backward) the band is searched
             for (int j = index - searchRange; j < index + searchRange; j++)
             {
                 if (turingBand[j] != emptySymbol)
@@ -80,14 +102,14 @@ namespace ConsoleClient
         }
 
 
-
+        
         private void Reset()
         {
             turingBand = new char[2000000];
             index = (int)(1000000);
             for (int i = 0; i < turingBand.Length; i++)
             {
-                turingBand[i] = '_';
+                turingBand[i] = emptySymbol;
             }
         }
     }

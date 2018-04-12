@@ -11,11 +11,13 @@ namespace ConsoleClient
 {
     public class TuringMachine
     {
+        // Console window settings
         private static int WINDOW_WIDTH = 101;
         private static int WINDOW_HEIGHT = 30;
         private static int TITLE_LN = 0;
         private static int TITLE_BOTTOMLINE_LN = 1;
 
+        // TM Vars
         private readonly HashSet<string> _states;
         private readonly HashSet<char> _symbols;
         private readonly char _emptySymbol;
@@ -30,11 +32,14 @@ namespace ConsoleClient
         private Stopwatch executionTime;
         private int executionSteps = 0;
 
+        // Output commands
         private List<string> commands { get; set; } = new List<string>();
-
+        
+        // Display vars
         private delegate void Display();
         private Display display;
         private Timer t;
+
 
 
         public TuringMachine(
@@ -80,6 +85,11 @@ namespace ConsoleClient
         }
 
 
+
+        /// <summary>
+        /// Starts the TM
+        /// </summary>
+        /// <param name="word">The word to be processed</param>
         public void Start(string word)
         {
             // Reset machine
@@ -117,6 +127,7 @@ namespace ConsoleClient
             executionTime = new Stopwatch();
             executionTime.Start();
 
+            // Start in certain mode defined by settings
             bool running = true;
             switch (settings.StepMode)
             {
@@ -144,6 +155,10 @@ namespace ConsoleClient
             }
         }
 
+        /// <summary>
+        /// Setter for settings
+        /// </summary>
+        /// <param name="s">Settings of the turingmachine</param>
         public void SetSettings(TuringSettings s)
         {
             settings = s;
@@ -175,6 +190,7 @@ namespace ConsoleClient
             TuringRuleOutput o = _rules[new TuringRuleInput() {CurrentChar = c, CurrentState = currentState}];
             currentState = o.NewState;
             turingBand.Write(o.NewChar, o.Direction);
+            
 
             // Add command
             commands.Add($"State: {o.NewState}, Write: {o.NewChar}, Dir: {o.Direction}");
@@ -222,7 +238,8 @@ namespace ConsoleClient
             foreach (string cmd in commands)
             {
                 Console.SetCursorPosition(0, ln);
-                Console.Write(cmd + "                            ");
+                int whitespaces = WINDOW_WIDTH - cmd.Length - 1;
+                Console.Write(cmd + new String(' ', whitespaces));
                 ln++;
             }      
         }
@@ -255,7 +272,8 @@ namespace ConsoleClient
             foreach (string cmd in commands)
             {
                 Console.SetCursorPosition(0, ln);
-                Console.Write(cmd + "                            ");
+                int whitespaces = WINDOW_WIDTH - cmd.Length - 1;
+                Console.Write(cmd + new String(' ', whitespaces));
                 ln++;
             }
         }

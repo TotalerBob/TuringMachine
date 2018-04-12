@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleClient
 {
+    /// <summary>
+    /// Wrapper for the turing rules
+    /// </summary>
     public class TuringRule
     {
         public string CurrentState { get; set; }
@@ -26,6 +29,9 @@ namespace ConsoleClient
         }
     }
 
+    /// <summary>
+    /// The input filter for a rule
+    /// </summary>
     public class TuringRuleInput
     {
         public string CurrentState { get; set; }
@@ -44,6 +50,9 @@ namespace ConsoleClient
         }
     }
 
+    /// <summary>
+    /// The rules to be applied
+    /// </summary>
     public class TuringRuleOutput
     {
         public string NewState { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,9 @@ namespace ConsoleClient
         static void Main(string[] args)
         {
 
-            // ------------ TOURING MACHINE SETUP ------------- //
+            // ------------ TURING MACHINE SETUP ------------- //
+
+            #region Turing machine
             // States
             List<string> states = new List<string>();
             states.Add("START");
@@ -223,7 +226,100 @@ namespace ConsoleClient
             rules.Add(new TuringRule("CLEAN_END", '=', "END", '_', 'R'));
             #endregion rules
 
+            #endregion Turing machine
 
+
+            // ----------------- USER INPUT ------------------ //
+
+            #region User Input
+            // Numbers to be calculated
+            string number_a;
+            string number_b;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("PLEASE ENTER FIRST NUMBER IN BINARY FORMAT: (e.g. 100101)");
+                number_a = Console.ReadLine();
+                Console.WriteLine("PLEASE ENTER SECOND NUMBER IN BINARY FORMAT: (e.g. 10111)");
+                number_b = Console.ReadLine();
+                Console.WriteLine("THE WORD TO BE PROCESSED WILL BE:");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(number_a + "*" + number_b);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("IS THIS CORRECT? [Y/N]");
+                char c = Console.ReadKey(true).KeyChar;
+                if (c.Equals('Y') || c.Equals('y'))
+                {
+                    break;
+                }
+            }
+
+            // Process mode
+            TuringSettings s = new TuringSettings();
+            Console.WriteLine("PLEASE ENTER THE PROCESS MODE: [AUTO, MANUAL, TIMED]");
+            string processMode = Console.ReadLine();
+            switch (processMode.ToLower())
+            {
+                case "auto":
+                    s.StepMode = StepMode.AUTO;
+                    break;
+                case "manual":
+                    s.StepMode = StepMode.MANUAL;
+                    break;
+                case "timed":
+                    s.StepMode = StepMode.TIMED;
+                    break;
+                default:
+                    s.StepMode = StepMode.MANUAL;
+                    break;
+            }
+
+            // Step mode
+            if (s.StepMode == StepMode.TIMED)
+            {
+                Console.WriteLine("HOW MANY MS TO WAIT BETWEEN EVERY CALCULATION STEP? [25 - 2000]");
+                string ms_string = Console.ReadLine();
+                int ms = Int16.Parse(ms_string);
+                if (ms > 0)
+                {
+                    if (ms < 25)
+                        ms = 25;
+                    if (ms > 2000)
+                        ms = 2000;
+                }
+                else
+                {
+                    ms = 500;
+                }
+
+                s.DoStepEveryXMilliseconds = ms;
+            }
+
+            // Output mode
+            Console.WriteLine("PLEASE ENTER THE OUTPUT MODE: [COMMANDS, BAND, MIXED, NONE]");
+            string outputMode = Console.ReadLine();
+            switch (outputMode.ToLower())
+            {
+                case "commands":
+                    s.OutputMode = OutputMode.COMMANDS;
+                    break;
+                case "band":
+                    s.OutputMode = OutputMode.GRAPHICAL;
+                    break;
+                case "mixed":
+                    s.OutputMode = OutputMode.MIXED;
+                    break;
+                case "none":
+                    s.OutputMode = OutputMode.NONE;
+                    break;
+                default:
+                    s.OutputMode = OutputMode.MIXED;
+                    break;
+            }
+            #endregion User Input
+
+
+            // Create turing machine
             TuringMachine tm = new TuringMachine(
                 states: states,
                 initialState: initialState,
@@ -233,9 +329,23 @@ namespace ConsoleClient
                 inputSymbols: inputSymbols,
                 rules: rules
                 );
+            // Add user settings
+            tm.SetSettings(s);
 
-            tm.Start("1111101000*1111101000");
-            Console.Read();
+            // Execute TM
+            try
+            {
+                tm.Start(number_a + "*" + number_b);
+            }
+            catch
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("INPUT WAS FAULTY, CHECK INPUT AND TRY AGAIN!");
+            }
+
+            // End
+            Console.ReadKey(true);
         }
     }
 }
