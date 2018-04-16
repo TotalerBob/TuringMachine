@@ -146,11 +146,11 @@ namespace ConsoleClient
                     }
                     break;
                 case StepMode.TIMED:
-                    t = new Timer();
-                    t.Interval = settings.DoStepEveryXMilliseconds;
-                    t.Elapsed += new ElapsedEventHandler(DoStepTimerWrapper);
-                    Thread.Sleep(settings.DoStepEveryXMilliseconds);
-                    t.Start();
+                    while (running)
+                    {
+                        Thread.Sleep(settings.DoStepEveryXMilliseconds);
+                        running = DoStep();
+                    }
                     break;
             }
         }
@@ -162,16 +162,6 @@ namespace ConsoleClient
         public void SetSettings(TuringSettings s)
         {
             settings = s;
-        }
-
-
-
-        private void DoStepTimerWrapper(object source, ElapsedEventArgs e)
-        {
-            if (!DoStep())
-            {
-                t.Stop();
-            }
         }
 
         private bool DoStep()
@@ -269,7 +259,7 @@ namespace ConsoleClient
             }
 
             int ln = TITLE_BOTTOMLINE_LN + 4;
-            foreach (string cmd in commands)
+            foreach (string cmd in commands.ToArray())
             {
                 Console.SetCursorPosition(0, ln);
                 int whitespaces = WINDOW_WIDTH - cmd.Length - 1;

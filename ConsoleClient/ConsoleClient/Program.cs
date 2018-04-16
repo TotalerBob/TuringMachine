@@ -131,7 +131,7 @@ namespace ConsoleClient
 
             rules.Add(new TuringRule("READ_A", '0', "READ_A", '0', 'L'));
             rules.Add(new TuringRule("READ_A", '1', "FILL_A", '0', 'R'));
-            rules.Add(new TuringRule("READ_A", '_', "CLEAN_CALCULATION", '_', 'R')); // END
+            rules.Add(new TuringRule("READ_A", '_', "CLEAN_CALCULATION", '_', 'R'));
 
             rules.Add(new TuringRule("FILL_A", '0', "FILL_A", '1', 'R'));
             rules.Add(new TuringRule("FILL_A", '*', "GOTO_B", '*', 'R'));
