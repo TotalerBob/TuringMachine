@@ -203,7 +203,7 @@ namespace ConsoleClient
             float seconds = executionTime.ElapsedMilliseconds / 1000f;
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(0, WINDOW_HEIGHT - 3);
-            Console.Write($"Operation completed in " + ((seconds > 1) ? seconds + "s" : executionTime.ElapsedMilliseconds + "ms") + " in " + executionSteps + " calculation steps.");
+            Console.Write($"Operation completed in " + ((seconds > 1) ? seconds + "s" : executionTime.ElapsedMilliseconds + "ms") + " in " + executionSteps + " calculation steps. The final state was '" + this.currentState + "'.");
             Console.SetCursorPosition(0, WINDOW_HEIGHT - 2);
 
             string word = turingBand.GetWord();
